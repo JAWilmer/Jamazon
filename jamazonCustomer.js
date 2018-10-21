@@ -7,7 +7,7 @@ let connection = mysql.createConnection({
     host: "localhost",
     port: 3306,
     user: "root",
-    password: "",
+    password: "tr1bal",
     database: "jamazon"
 });
 
@@ -57,17 +57,26 @@ function selectById() {
             validate: function (value) {
                 if (isNaN(value) === false) {
                     return true;
+                } else if (stock_quantity < parseInt(answers.stock_quantity)) {
+                    console.log(`We're sorry, we only have ${products.stock_quantity} ${products.product_name} in stock, please enter a new quantity.`)
                 } else {
                     console.log(`Please enter a number.`);
                     return false;
+
                 }
             }
         }
     ]).then(function (answers) {
+        // hold user input values
         let newSalePrompt = new SalePrompt(
             answers.item_id,
             answers.stock_quantity);
+            // print what user input for purchase choice
         newSalePrompt.printInfo();
+
+
+
+
     });
 };
 
