@@ -3,6 +3,9 @@ let inquirer = require("inquirer");
 // let chalk = require("chalk");
 // let table = require("cli-table3");
 
+
+// const con = require('./connect');
+
 let connection = mysql.createConnection({
     host: "localhost",
     port: 3306,
