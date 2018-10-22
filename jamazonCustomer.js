@@ -1,10 +1,7 @@
 let mysql = require("mysql");
 let inquirer = require("inquirer");
-// let chalk = require("chalk");
-// let table = require("cli-table3");
-
-
-// const con = require('./connect');
+let chalk = require("chalk");
+let consoleTable = require("console.table");
 
 let connection = mysql.createConnection({
     host: "localhost",
@@ -18,8 +15,7 @@ connection.connect(function (err) {
     if (err) throw err;
     // console.log(`Connected as id ${connection.threadId}\n`);
     console.log(`Thank you for shopping at Julie Anne's Zon store (Jamazon).  Currently we have these items in stock:\n`)
-    //displayInventory();
-    selectById()
+    selectById();
 });
 
 function selectById() {
@@ -28,6 +24,7 @@ function selectById() {
         results.forEach(products => {
             console.log(`${products.item_id}  ${products.product_name}, $${products.price}`)
         })
+        // let newQuantity = function() {
         inquirer.prompt([
             {
                 name: "item_id",
@@ -42,8 +39,6 @@ function selectById() {
                     }
                 }
             },
-
-
             {
                 name: "stock_quantity",
                 type: "input",
@@ -59,14 +54,12 @@ function selectById() {
             }
         ]).then(function (answers) {
             // console.log(answers)
-
             let itemId = answers.item_id;
             let quantity = answers.stock_quantity;
             connection.query("SELECT * FROM products WHERE ?", { item_id: itemId }, function (err, results) {
                 if (err) throw err;
-                console.log(results)
-                if (results[0].stock_quantity > quantity) {
-
+                // console.log(results)
+                if (results[0].stock_quantity >= quantity) {
                     connection.query("UPDATE products SET ? WHERE ?", [
                         {
                             stock_quantity: results[0].stock_quantity - quantity
@@ -75,14 +68,20 @@ function selectById() {
                             item_id: itemId
                         }], function (error) {
                             if (error) throw err;
-
-                            console.log(`\n\nThank you for your purchase!`)
+                            let totalCost = quantity * results[0].price;
+                            console.log(`You ordered ${quantity} ${results[0].product_name} at ${results[0].price} each. Your total cost is: $${totalCost}.`);
+                            console.log(`\n\nThank you for your purchase!`);
                         })
-                }else{
-                    console.log ("We're sorry, we don't have that many, please choose a different quanity.");
+                } else {
+                    console.log("Insufficient Quantity!")
+                    // console.log("We're sorry, we only have BLANK in stock, please choose a different quanity.");
+                    // newQuantity();
+                    // call back to enter quantity prompt. 
                 }
+                connection.end();
             })
         })
     })
 }
+// newQuantity();
 
