@@ -19,10 +19,10 @@ let managerDuties = function () {
     inquirer.prompt([{
         name: "manageInventory",
         type: "list",
-        message: "\n\nHowdy, Manager!  How would you like to manage your inventory?",
+        message: "\n\nHowdy, Manager!  How would you like to manage your inventory?\n\n",
         choices: [
             'View Products for Sale',
-            'View Low Inventory',
+            'View Items with Low Inventory',
             'Add to Inventory',
             'Add New Product',
             'Exit'
@@ -42,8 +42,9 @@ let managerDuties = function () {
             case "Add New Product":
                 addProduct();
                 break;
-            case 'EXIT':
-                process.exit();
+            case 'Exit':
+                connection.end();
+                break;
         }
     })
 }
@@ -58,14 +59,20 @@ function productsForSale() {
 }
 
 function lowInventory() {
-    connection.query("SELECT * FROM products WHERE stock_quantity < 25", function (err, results) {
-        
+    connection.query("SELECT * FROM products WHERE stock_quantity < 99", function (err, results) {
+//         if (err) throw err;
+//         // console.log(results);
+//         console.table(results);
+//         managerDuties();
+//     });
+// }
+
         if (err) {
-             throw err 
+            throw err
         } else if (!err) {
             console.table(results);
-        } else {
-            console.lot(`You have 25 or more of each item in your inventory. Your store is fully stocked.`)
+        } else if (results = null) {
+            console.log(`You have 90 or more of each item in your inventory. Your store is fully stocked.`);
         }
         managerDuties();
     });
@@ -110,6 +117,7 @@ function addInventory() {
                     if (err) throw err;
                     console.log(results)
                     console.log(`${productName} stock has been updated to: ${updatedQuantity}.`);
+                    productsForSale();
                     managerDuties();
                 });
         })
@@ -131,7 +139,7 @@ function addProduct() {
         {
             name: "price",
             type: "input",
-            message: "What is the price per unit? Please enter price in this format: $000.00",
+            message: "What is the price per unit? Please enter price in this format: 000.00",
             validate: function (value) {
                 if (isNaN(value) === false) {
                     return true;
@@ -158,10 +166,14 @@ function addProduct() {
                 price: stockAnswer.price,
                 stock_quantity: stockAnswer.stockCount
             },
-            function (err) {
-                if (err) throw (err)
+            // function (err) {
+                // if (err) throw (err)
+                function (err, results) {
+                    if (err) throw err;
+                    confirm.log(results);
                 console.log(`\n Your new product has been added succesfully! Your inventory now contains:\n`);
                 productsForSale();
+                managerDuties();
             });
     })
 }

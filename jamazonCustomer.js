@@ -53,9 +53,18 @@ function selectById() {
                 }
             }
         ]).then(function (answers) {
-            // console.log(answers)
+            console.log(answers)
             let itemId = answers.item_id;
+            let itemIndex = (answers.item_id - 1);
             let quantity = answers.stock_quantity;
+            var totalCost = quantity * results[itemIndex].price;
+            console.log(quantity)
+            console.log(JSON.stringify(results[itemIndex]))
+            console.log('total Cost:')
+            console.log(totalCost)
+            console.log (results[itemIndex].product_sales)
+            let newSales = parseInt(results.product_sales + totalCost);
+            console.log(`New Sales: ${newSales}`)
             connection.query("SELECT * FROM products WHERE ?", { item_id: itemId }, function (err, results) {
                 if (err) throw err;
                 // console.log(results)
@@ -66,11 +75,19 @@ function selectById() {
                         },
                         {
                             item_id: itemId
-                        }], function (error) {
+                        }, 
+                        {
+                            product_sales: newSales
+                        }
+                    ], function (error) {
+
                             if (error) throw err;
-                            let totalCost = quantity * results[0].price;
-                            console.log(`You ordered ${quantity} ${results[0].product_name} at ${results[0].price} each. Your total cost is: $${totalCost}.`);
+                            console.log(`You ordered ${quantity} ${results[0].product_name} at $${results[0].price} each. Your total cost is: $${totalCost}.`);
                             console.log(`\n\nThank you for your purchase!`);
+                            console.log(`results product sales $${results[0].product_sales}.`);
+                            console.log(`totalCost:`, totalCost)
+                            console.log(`price:`, results[0].price)
+                            console.log(`quantity: `, quantity)
                         })
                 } else {
                     console.log("Insufficient Quantity!")
