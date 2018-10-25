@@ -88,7 +88,7 @@ function selectById() {
 
                         if (error) throw err;
                         console.log(chalk.green(`\n\nYou ordered ${quantity} ${results[0].product_name} at $${results[0].price} each. Your total cost is: $${totalCost}.\nThank you for your purchase!\n`));
-                            // `       Product sales $${results[0].product_sales}\n`,
+                            // console.log(`       Product sales $${results[0].product_sales}\n`,
                             // `       New product sales: $${newSales}\n`,
                             // `       Stock quantity: ${results[0].stock_quantity}\n`,
                             // `       New quanity: ${newStock}\n`);

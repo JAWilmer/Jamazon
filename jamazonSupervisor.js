@@ -21,7 +21,7 @@ let supervisorDuties = function () {
     inquirer.prompt([{
         name: "manageDepartments",
         type: "list",
-        message: "\n\nHowdy, Supervisor!  How would you like to manage your departments?\n\n",
+        message: chalk.blue("\n\nHowdy, Supervisor!  How would you like to manage your departments?\n\n"),
         choices: [
             'View Product Sales by Department',
             'Create a New Department',
@@ -46,8 +46,13 @@ supervisorDuties();
 
 function viewSales() {
 
-    connection.query("SELECT * FROM departments", function (err, results) {
-        if (err) throw err;
+    let query = 'SELECT departments.department_id, departments.department_name, departments.over_head_cost, sum(products.product_sales) AS product_sales, sum(products.product_sales) - departments.over_head_cost AS total_profit ';
+        query += 'FROM departments ';
+        query += 'INNER JOIN products ON departments.department_name = products.department_name ';
+        query += 'GROUP BY departments.department_id';
+  
+    connection.query(query, function (error, results) {
+      if (error) throw error;
         console.table(results);
         supervisorDuties();
     });
@@ -80,8 +85,7 @@ function addDepartment() {
             },
             function (err, results) {
                 if (err) throw err;
-                console.log("answer", NewProductAnswer)
-                console.log(chalk.green(`${NewProductAnswer.department} has been added and set with an overhead cost of: $${NewProductAnswer.overhead}.`));
+                console.log(chalk.green(`\n\n${NewProductAnswer.department} has been added and set with an overhead cost of: $${NewProductAnswer.overhead}.\nHere is an updates summary of your departments: \n`));
                 viewSales();
             });
     })
