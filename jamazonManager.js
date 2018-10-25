@@ -2,12 +2,14 @@ let mysql = require("mysql");
 let inquirer = require("inquirer");
 let chalk = require("chalk");
 let consoleTable = require("console.table");
+require('dotenv').config();
+var mysql_pass = process.env.MYSQL_PASS;
 
 let connection = mysql.createConnection({
     host: "localhost",
     port: 3306,
     user: "root",
-    password: "",
+    password: mysql_pass,
     database: "jamazon"
 });
 
@@ -19,7 +21,7 @@ let managerDuties = function () {
     inquirer.prompt([{
         name: "manageInventory",
         type: "list",
-        message: "\n\nHowdy, Manager!  How would you like to manage your inventory?\n\n",
+        message: chalk.blue("\n\nHowdy, Manager!  How would you like to manage your inventory?\n\n"),
         choices: [
             'View Products for Sale',
             'View Items with Low Inventory',
@@ -60,19 +62,20 @@ function productsForSale() {
 
 function lowInventory() {
     connection.query("SELECT * FROM products WHERE stock_quantity < 99", function (err, results) {
-//         if (err) throw err;
-//         // console.log(results);
-//         console.table(results);
-//         managerDuties();
-//     });
-// }
+        //         if (err) throw err;
+                // console.log(results);
+        //         console.table(results);
+        //         managerDuties();
+        //     });
+        // }
 
         if (err) {
             throw err
-        } else if (!err) {
+        } else if (results = []) {
+            console.log(chalk.green(`\nYou have 100 or more of each item in your inventory. Your store is fully stocked.\n`))
+        } else {
+            console.log(chalk.magenta(`\nThere are fewer than 100 of each of these items in stock.\n`))
             console.table(results);
-        } else if (results = null) {
-            console.log(`You have 90 or more of each item in your inventory. Your store is fully stocked.`);
         }
         managerDuties();
     });
@@ -85,7 +88,7 @@ function addInventory() {
             {
                 name: "product",
                 type: "list",
-                message: "Which product would you like to restock:",
+                message: chalk.cyan("\nWhich product would you like to restock:\n"),
                 choices: function () {
                     let productArray = [];
                     for (var i = 0; i < results.length; i++) {
@@ -97,7 +100,7 @@ function addInventory() {
             {
                 name: "quantity",
                 type: "input",
-                message: "How many items would you like to add?"
+                message: chalk.cyan("\nHow many items would you like to add?\n")
             }
         ]).then(function (restockAnswer) {
             // add in nan info
@@ -115,10 +118,9 @@ function addInventory() {
                 }],
                 function (err, results) {
                     if (err) throw err;
-                    console.log(results)
-                    console.log(`${productName} stock has been updated to: ${updatedQuantity}.`);
+                    // console.log(results)
+                    console.log(chalk.magenta(`\n\n${productName} stock count has been updated to: ${updatedQuantity} items.\nYour inventory now looks like this: \n`));
                     productsForSale();
-                    managerDuties();
                 });
         })
     });
@@ -129,17 +131,17 @@ function addProduct() {
         {
             name: "newProduct",
             type: "input",
-            message: "What product would you like to add?"
+            message: chalk.cyan("\nWhat product would you like to add?")
         },
         {
             name: "department",
             type: "input",
-            message: "In which department should we classify this item?",
+            message: chalk.cyan("\nIn which department should we classify this item?")
         },
         {
             name: "price",
             type: "input",
-            message: "What is the price per unit? Please enter price in this format: 000.00",
+            message: chalk.cyan("\nWhat is the price per unit? Please enter price in this format: 000.00."),
             validate: function (value) {
                 if (isNaN(value) === false) {
                     return true;
@@ -150,7 +152,7 @@ function addProduct() {
         {
             name: "stockCount",
             type: "input",
-            message: "How many of this new product are you adding to stock?",
+            message: chalk.cyan("\nHow many of this new product are you adding to stock?"),
             validate: function (value) {
                 if (isNaN(value) === false) {
                     return true;
@@ -166,14 +168,10 @@ function addProduct() {
                 price: stockAnswer.price,
                 stock_quantity: stockAnswer.stockCount
             },
-            // function (err) {
-                // if (err) throw (err)
-                function (err, results) {
-                    if (err) throw err;
-                    confirm.log(results);
-                console.log(`\n Your new product has been added succesfully! Your inventory now contains:\n`);
+            function (err) {
+            if (err) throw (err)
+                console.log(chalk.magenta(`\n Your new product has been added succesfully! Your inventory now contains:\n`));
                 productsForSale();
-                managerDuties();
             });
     })
 }
