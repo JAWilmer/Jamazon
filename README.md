@@ -21,6 +21,7 @@ Jamazon function on three levels.
 ### JAMAZON IN ACTION ###
 
 __CUSTOMER INTERFACE__
+
 Below Jamazon has been seeded with 12 items available for purchase.  
 ![Seeded Customer Database](/images/image21.png)
 
