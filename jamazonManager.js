@@ -1,3 +1,4 @@
+// Dependencies 
 let mysql = require("mysql");
 let inquirer = require("inquirer");
 let chalk = require("chalk");
@@ -5,6 +6,7 @@ let consoleTable = require("console.table");
 require('dotenv').config();
 var mysql_pass = process.env.MYSQL_PASS;
 
+// Connection to MySQL
 let connection = mysql.createConnection({
     host: "localhost",
     port: 3306,
@@ -12,16 +14,16 @@ let connection = mysql.createConnection({
     password: mysql_pass,
     database: "jamazon"
 });
-
 connection.connect(function (err) {
     if (err) throw err;
 });
 
+// Function to list Manager duty options
 let managerDuties = function () {
     inquirer.prompt([{
         name: "manageInventory",
         type: "list",
-        message: chalk.blue("\n\nHowdy, Manager!  How would you like to manage your inventory?\n\n"),
+        message: chalk.blue.bold("\n\nHowdy, Manager!  How would you like to manage your inventory?\n\n"),
         choices: [
             'View Products for Sale',
             'View Items with Low Inventory',
@@ -52,6 +54,7 @@ let managerDuties = function () {
 }
 managerDuties();
 
+// Function to list products for sale
 function productsForSale() {
     connection.query("SELECT * FROM products", function (err, results) {
         if (err) throw err;
@@ -60,27 +63,22 @@ function productsForSale() {
     });
 }
 
+// Function to list items with total stock count of less than 100.   
 function lowInventory() {
     connection.query("SELECT * FROM products WHERE stock_quantity < 99", function (err, results) {
-        //         if (err) throw err;
-                // console.log(results);
-        //         console.table(results);
-        //         managerDuties();
-        //     });
-        // }
-
         if (err) {
             throw err
-        } else if (results = []) {
+        } else if (!results.length) {
             console.log(chalk.green(`\nYou have 100 or more of each item in your inventory. Your store is fully stocked.\n`))
         } else {
-            console.log(chalk.magenta(`\nThere are fewer than 100 of each of these items in stock.\n`))
+            console.log(chalk.magenta.bold(`\nThere are fewer than 100 of each of these items in stock.\n`))
             console.table(results);
         }
         managerDuties();
     });
 }
 
+// Function to allow manager to add stock count to currently inventoried products
 function addInventory() {
     connection.query("SELECT * FROM products", function (err, results) {
         if (err) throw err;
@@ -88,7 +86,7 @@ function addInventory() {
             {
                 name: "product",
                 type: "list",
-                message: chalk.cyan("\nWhich product would you like to restock:\n"),
+                message: chalk.cyan("Which product would you like to restock:"),
                 choices: function () {
                     let productArray = [];
                     for (var i = 0; i < results.length; i++) {
@@ -100,10 +98,17 @@ function addInventory() {
             {
                 name: "quantity",
                 type: "input",
-                message: chalk.cyan("\nHow many items would you like to add?\n")
+                message: chalk.cyan("How many items would you like to add?"),
+                validate: function (value) {
+                    if (isNaN(value) === false) {
+                        return true;
+                    } else {
+                        console.log(chalk.red.bold(`\n\nPlease enter a number.\n`));
+                        return false;
+                    }
+                }
             }
         ]).then(function (restockAnswer) {
-            // add in nan info
             console.log("restock answer: ", restockAnswer)
             console.log("results[0].stock_quantity", results[0].stock_quantity)
             console.log('restockAnswer.quantity', restockAnswer.quantity)
@@ -118,7 +123,6 @@ function addInventory() {
                 }],
                 function (err, results) {
                     if (err) throw err;
-                    // console.log(results)
                     console.log(chalk.magenta(`\n\n${productName} stock count has been updated to: ${updatedQuantity} items.\nYour inventory now looks like this: \n`));
                     productsForSale();
                 });
@@ -126,6 +130,7 @@ function addInventory() {
     });
 }
 
+// Function to add a new product to inventory
 function addProduct() {
     inquirer.prompt([
         {
@@ -145,8 +150,10 @@ function addProduct() {
             validate: function (value) {
                 if (isNaN(value) === false) {
                     return true;
+                } else {
+                    console.log(chalk.red.bold(`\n\nPlease enter a number.\n`));
+                    return false;
                 }
-                return false;
             }
         },
         {
@@ -156,11 +163,14 @@ function addProduct() {
             validate: function (value) {
                 if (isNaN(value) === false) {
                     return true;
+                } else {
+                    console.log(chalk.red.bold(`\n\nPlease enter a number.\n`));
+                    return false;
                 }
-                return false;
             }
         }
     ]).then(function (stockAnswer) {
+        // Update MySQL to reflect new product
         connection.query("INSERT INTO products SET ?",
             {
                 product_name: stockAnswer.newProduct,
@@ -169,7 +179,7 @@ function addProduct() {
                 stock_quantity: stockAnswer.stockCount
             },
             function (err) {
-            if (err) throw (err)
+                if (err) throw (err)
                 console.log(chalk.magenta(`\n Your new product has been added succesfully! Your inventory now contains:\n`));
                 productsForSale();
             });
