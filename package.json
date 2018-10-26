@@ -1,0 +1,26 @@
+{
+  "name": "jamazon",
+  "version": "1.0.0",
+  "description": "",
+  "main": "jamazonCustomer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JAWilmer/Jamazon.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JAWilmer/Jamazon/issues"
+  },
+  "homepage": "https://github.com/JAWilmer/Jamazon#readme",
+  "dependencies": {
+    "chalk": "^2.4.1",
+    "console.table": "^0.10.0",
+    "dotenv": "^6.1.0",
+    "inquirer": "^6.2.0",
+    "mysql": "^2.16.0"
+  }
+}
