@@ -27,10 +27,12 @@ Upon calling JamazonCustomer.js in Node, the app immediately lists all items ava
 ![Customer MySQL Update](/images/image8.png)
 
 
-__Multiple Purchase:__ 
+
+__Multiple Purchases:__ 
 The JamazonCustomer.js also allows for multiple purchases to be made before exiting the application. 
 
 ![Customer Multiple Sales](/images/image4.png)
+
 
 
 __Handeling Errors:__ 
@@ -51,11 +53,13 @@ Upon calling JamazonCustomer.js in Node, the app immediately lists available man
 ![Manager menu](/images/image16.png)
 
 
+
 __View Products for Sale:__ 
 Selecting "View Products for Sale" requests data from the products table and uses [console.table npm](https://www.npmjs.com/package/console.table) to display available products numerically by item id. Product name, department name, price, quantity in stock, and product sales based on jamazonCustomer.js activity are also displayed.  The user is then asked how she/ he would like to further use their app. 
 
 ![Manager View Products](/images/image31.png)
 ![Manager View Products MySQL](/images/image9.png)
+
 
 
 __View Items with Low Inventory:__ 
@@ -68,6 +72,7 @@ In the event that all items are stocked at 100 of more items, the manager will b
 ![Manager No Low Inventory](/images/image18.png)
 
 
+
 __Add to Inventory:__ 
 Selecting "Add to Inventory" allows the manager to increase the stock count of any items already in inventory. The manager is prompted to scroll through a list of existing products and select that which she/ he would like to update. These changes are made in the database and reflected in a table displayed in the terminal.   
 
@@ -76,10 +81,12 @@ Selecting "Add to Inventory" allows the manager to increase the stock count of a
 ![Manager Add Inventory MySQL](/images/image7.png)
 
 
+
 __Handeling Errors:__ 
 If the manager inputs something other than a number she/he is prompted to enter a number. The database is updated once a number has been entered and the changes are reflected in a table displayed in the terminal. 
 
 ![Manager Add Inventory NaN](/images/image13.png)
+
 
 
 __Add New Product:__ 
@@ -95,6 +102,7 @@ The database is updated once a number has been entered and the changes are refle
 ![Manager Add Product MySQL](/images/image27.png)
 
 
+
 __Handeling Errors__
 If the manager inputs something other than a number she/he is prompted to enter a number. The database is updated once a number has been entered and the changes are reflected in a table displayed in the terminal. 
 ![Manager Add Product NaN](/images/image19.png)
@@ -106,10 +114,12 @@ Upon calling JamazonSupervisor.js in Node, the app immediately lists available s
 ![Supervisor menu](/images/image22.png)
 
 
+
 __View Product Sales by Department:__ 
 Selecting "View Product Sales by Department" makes a query to both products and departements tables.  The results returned are joined and manipulated in order to display department id, department name, overhead cost, product sales, and total price.  Product sales and total price are calculated dynamically based on data from both tables. The supervisor is then asked how she/he would further like to manage the inventory. 
 
 ![Supervisor View Product Sales](/images/image12.png)
+
 
 
 __Create a New Department:__ 
@@ -120,6 +130,7 @@ Selecting "Create a New Department" allows the supervisor to add an entirely new
 The database is updated and changes are reflected in a table displayed in the terminal. 
 ![Supervisor Create Department](/images/image14.png)
 ![Supervisor Create Department MySQL](/images/image20.png)
+
 
 
 __Handeling Errors:__ 
