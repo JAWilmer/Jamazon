@@ -23,21 +23,21 @@ Jamazon function on three levels.
 __CUSTOMER INTERFACE__
 
 Below Jamazon has been seeded with 12 items available for purchase.  
-![Seeded Customer Database](/images/image21.png)
+![Seeded Customer Database](/images/image.png)
 
 __Basic Function__
 Upon calling JamazonCustomer.js, the app immediately lists all items available for purchase numerically by item id.  The customer is prompted, through Inquirer NPM, to choose an item by inventory number, then an amount to purchase. The order, including total cost for the purchase is summarized and the user is asked if she/he wishes to make another purchase. 
 ![Customer Function Command Line](/images/image.png)
 
 MySQL is updated to reflect purchase. 
-![Customer Function MySQL Update](/images/image.png)
+![Customer Function MySQL Update](/images/image7.png)
 
 Multiple purchases can be made before exiting the application. 
-![Customer Function Multiple Sales](/images/image.png)
+![Customer Function Multiple Sales](/images/image4.png)
 
 __Handeling Errors__
 In the case that there are not enough items to fill a customer’s request, the customer is allerted and asked to choose another quantity or product. No changes are made to the database. 
-![Customer Function Insufficient Quantity](/images/image.png)
+![Customer Function Insufficient Quantity](/images/image3.png)
 
 The database is updated accordingly. 
 ![Customer Function Multiple Sales](/images/image.png)
@@ -60,20 +60,20 @@ Selecting "View Products for Sale" requests data from the products table and use
 
 __View Items with Low Inventory__
 Selecting "View Items with Low Inventory" queries the products database and returns and displays data for items with a stock quantity of less than 100. 
-![Manager Function Low Inventory](/images/image.png)
+![Manager Function Low Inventory](/images/image1.png)
 ![Manager Function Low Inventory MySQL](/images/image.png)
 
 In the event that all items are at 100 or great stock count the "manager" will be informed. 
 
 __Add to Inventory__
 Selecting "Add to Inventory" allows the "manager" to increase the stock count of any items already in inventory. The "manager" is prompted to scroll through a list of existing products and select that which she/ he would like to update.  
-![Manager Function Add Inventory Menu](/images/image.png)
-![Manager Function Add Inventory](/images/image.png)
+![Manager Function Add Inventory Menu](/images/image2.png)
+![Manager Function Add Inventory](/images/image6.png)
 ![Manager Function Add Inventory MySQL](/images/image.png)
 
 __Handeling Errors__
 If the manager inputs something other than a number she/he is prompted to enter a number.  
-![Manager Function Add Inventory NaN](/images/image.png)
+![Manager Function Add Inventory NaN](/images/image10.png)
 The database is updated once a number is entered. 
 ![Manager Function Add Inventory NaN MySQL](/images/image.png)
 
